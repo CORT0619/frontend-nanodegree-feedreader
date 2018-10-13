@@ -31,12 +31,23 @@ $(function() {
          * in the allFeeds object and ensures it has a URL defined
          * and that the URL is not empty.
          */
-
+        it('should loop througth the allFeeds and url should be defined', function() {
+            allFeeds.forEach(function(feed) {
+                expect(feed.url).toBeDefined();
+                expect(feed.url).not.toBe('');
+            });
+        });
 
         /* TODO: Write a test that loops through each feed
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
+        it('should loop through allFeeds and name should be defined', function() {
+            allFeeds.forEach(function(feed) {
+                expect(feed.name).toBeDefined();
+                expect(feed.name).not.toEqual('');
+            });
+        });
     });
 
 
@@ -53,6 +64,19 @@ $(function() {
           * should have two expectations: does the menu display when
           * clicked and does it hide when clicked again.
           */
+    describe('The menu', function() {
+        it('should be hidden by default', function() {
+            expect($('body').hasClass('menu-hidden')).toBe(true);
+        });
+
+        it('should change visibility when clicked', function() {
+            $('.menu-icon-link').click();
+            expect($('body').hasClass('menu-hidden')).toBe(false);
+
+            $('.menu-icon-link').click();
+            expect($('body').hasClass('menu-hidden')).toBe(true);
+        });
+    });    
 
     /* TODO: Write a new test suite named "Initial Entries" */
 
@@ -69,4 +93,32 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+    describe('Initial Entries', function() {
+
+        beforeEach(function(done) {
+            loadFeed(0, function() {
+                done();
+            });
+        });
+
+        it('should be at least 1 element in the feed container', function() {
+            expect($('.feed').children().length).toBeGreaterThan(0);
+        });
+    });
+    
+    describe('New Feed Selection', function() {
+        let feed = [];
+
+        beforeEach(function(done) {
+            loadFeed(0, function() {
+                done();
+            });
+        });
+
+        it('should be different than the previous feed', function(done) {
+            feed = $('.feed').children();
+            expect(feed[0].innerHTML).not.toBe(feed[1].innerHTML);
+            done();
+        });
+    });
 }());
